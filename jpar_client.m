@@ -23,6 +23,13 @@ javaaddpath jpar.jar;
 hostname = 'localhost';
 client = matlab.jpar.client.JParClientImpl(hostname);
 
+if ~client.isInitialized
+    fprintf(2, 'jpar: client initialization failed\n');
+    clear tmp client;
+    javarmpath jpar.jar;
+    return;
+end
+
 % --------------------------------------------------------------------------------
 %                                                                         Initiate
 %                                                                         --------

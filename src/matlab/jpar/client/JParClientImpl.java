@@ -1,5 +1,6 @@
 package matlab.jpar.client;
 
+import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -22,6 +23,13 @@ public class JParClientImpl extends UnicastRemoteObject implements
 	private JParServer server;
 
 	private static final long serialVersionUID = 7526472295622776147L;
+	
+	// this flag should be checked by M-scripts
+	private boolean initialized = false;
+	
+	public boolean isInitialized() {
+		return initialized;
+	}	
 
 	public Object getResult(String taskID) {
 		synchronized (taskSynch) {
@@ -33,20 +41,31 @@ public class JParClientImpl extends UnicastRemoteObject implements
 		if (System.getSecurityManager() == null) {
 			System.setSecurityManager(new RMISecurityManager());
 		}
-		this.task_count = 0;
-		this.task_no = 0;
-		this.taskSynch = new Object();
-		this.results = new Hashtable();
-		try {
-			String serverName = "JParServer";
+
+		String serverName = "JParServer";
+		try {			
 			Registry registry = LocateRegistry.getRegistry(hostname);
 			this.server = (JParServer) registry.lookup(serverName);
+		} catch (RemoteException e) {
+			System.err.println("Solver: Java RMI Exception:" + e.getMessage());
+			return;			
+		} catch (NotBoundException e) {
+			System.err.println("Solver: " + serverName + " lookup failed:" + e.getMessage());
+			return;
 		} catch (Exception e) {
 			System.err.println("\n");
 			System.err.println("Client: JParClinet Searching Server Exception: " 
 					+ e.getMessage());
 			e.printStackTrace();
+			return;
 		}
+
+		this.task_count = 0;
+		this.task_no = 0;
+		this.taskSynch = new Object();
+		this.results = new Hashtable();
+		
+		initialized = true;
 	}
 
 	public boolean taskIsDone(String taskID, Object[] retVal)

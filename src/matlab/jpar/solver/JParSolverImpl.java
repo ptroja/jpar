@@ -1,6 +1,7 @@
 package matlab.jpar.solver;
 
 import java.net.InetAddress;
+import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -29,11 +30,18 @@ public class JParSolverImpl extends UnicastRemoteObject implements
 	private static final int JOB_KILL = 2;
 	private int pendingJob;
 	
+	// this flag should be checked by M-scripts
+	private boolean initialized = false;
+	
+	public boolean isInitialized() {
+		return initialized;
+	}	
+	
 	private static final long serialVersionUID = 7526472295622776147L;
 
 	public int getTask_no() {
-		return task_no;
-	}
+		return task_no;	}
+
 	
 	public Object[] getNewArgs() {
 		return newArgs;
@@ -64,18 +72,29 @@ public class JParSolverImpl extends UnicastRemoteObject implements
 		if (System.getSecurityManager() == null) {
 			System.setSecurityManager(new RMISecurityManager());
 		}
-		String serverName = "JParServer";
-		Registry registry = LocateRegistry.getRegistry(host);
+		
+		String serverName = "JParServer";		
 		try {
+			Registry registry = LocateRegistry.getRegistry(host);
 			this.server = (JParServer) registry.lookup(serverName);
+		} catch (RemoteException e) {
+			System.err.println("Solver: Java RMI Exception:" + e.getMessage());
+			return;			
+		} catch (NotBoundException e) {
+			System.err.println("Solver: " + serverName + " lookup failed:" + e.getMessage());
+			return;
 		} catch (Exception e) {
 			System.err.println("Solver: JParSolver Constructor:" + e.getMessage());					
 			e.printStackTrace();
+			return;
 		}
+		
 		this.taskSynchObj = new Object();
 		this.pendingJob = JOB_WAITING_FOR;
 		
-		this.register();
+		if (this.register()) {
+			initialized = true;
+		}
 	}
 
 	public boolean executeTask(Remote cli, String taskID, int nargout, String argout, String func, Object[] args)

@@ -1,4 +1,7 @@
 function jpar_solver(hostname)
+%jpar_solver: Run parallellization solver on a Matlab node.
+%Inputs:  hostname - hostname of the jpar registration server instance,
+%                    defaults to localhost
 
 if ~exist('j2m_solver_wrapper','file'),
     error(['Function j2m_solver_wrapper doesn''t seam to exist']);
@@ -14,16 +17,21 @@ end
 fprintf(1, 'Registering solver...');  
 javaaddpath jpar.jar;
 solver = matlab.jpar.solver.JParSolverImpl(hostname);
-fprintf(1, ' done\n');
-while solver.waitForJob(),
-    newargs = solver.getNewArgs();
-    j2m_solver_wrapper(newargs(1), newargs(2), newargs(3), newargs(4), newargs(5:length(newargs)));
+if solver.isInitialized
+    fprintf(1, ' done\n');
+    while solver.waitForJob(),
+        newargs = solver.getNewArgs();
+        j2m_solver_wrapper(newargs(1), newargs(2), newargs(3), newargs(4), newargs(5:length(newargs)));
+    end
+else
+    fprintf(2, 'jpar: solver registration failed\n');
 end
+
 clear solver;
 javarmpath jpar.jar;
 
-
 return;
+
 function j2m_solver_wrapper(solver, nargout, argout, func, varargin)
 t1 = java.lang.System.currentTimeMillis();
 
