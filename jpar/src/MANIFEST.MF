@@ -1,0 +1,10 @@
+Main-Class: matlab.jpar.server.JParServerImpl
+Specification-Title: JPar
+Specification-Version: 1.0
+Specification-Vendor: Institiute of Control and Computation Engineerin
+ g
+Implementation-Title: JPar
+Implementation-Version: 1.0 May 1 2009
+Implementation-Vendor: Institiute of Control and Computation Engineeri
+ ng
+

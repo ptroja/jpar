@@ -1,0 +1,48 @@
+<project name="JPar" default="dist" basedir=".">
+    <description>
+        JPar build file
+    </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
+  <property name="dist"  location="jpar.jar"/>
+  <property name="version"  value="1.0"/>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init"
+        description="compile the source " >
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac srcdir="${src}" destdir="${build}"/>
+  </target>
+
+  <target name="dist" depends="compile"
+        description="generate the distribution" >
+    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    <jar jarfile="${dist}" basedir="${build}">
+      <!-- Create MANIFEST.MF file -->
+      <manifest>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Main-Class" value="matlab.jpar.server.JParServerImpl"/>
+        <attribute name="Specification-Title" value="JPar"/>
+        <attribute name="Specification-Version" value="${version}"/>
+        <attribute name="Specification-Vendor" value="Institiute of Control and Computation Engineering"/>
+        <attribute name="Implementation-Title" value="JPar"/>
+        <attribute name="Implementation-Version" value="${version} ${TODAY}"/> 
+        <attribute name="Implementation-Vendor" value="Institiute of Control and Computation Engineering"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="clean"
+        description="clean up" >
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}/matlab"/>
+    <delete file="${dist}"/>
+  </target>
+</project>

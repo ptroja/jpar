@@ -1,0 +1,2 @@
+javac -d build src/matlab/jmstruct/JMStruct.java src/matlab/jpar/client/JParClientImpl_Stub.java src/matlab/jpar/client/common/JParClient.java src/matlab/jpar/client/JParClientImpl.java src/matlab/jpar/solver/JParSolverImpl.java src/matlab/jpar/solver/common/JParSolver.java src/matlab/jpar/solver/JParSolverImpl_Stub.java src/matlab/jpar/server/JParServerImpl_Stub.java src/matlab/jpar/server/common/JParServer.java src/matlab/jpar/server/JParServerImpl.java src/matlab/jmarray/JMArray.java
+jar cmf src/MANIFEST.MF jpar.jar -C build .
