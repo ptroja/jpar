@@ -1,6 +1,7 @@
 package matlab.jpar.solver;
 
 import java.net.InetAddress;
+import java.rmi.AccessException;
 import java.rmi.NotBoundException;
 import java.rmi.RMISecurityManager;
 import java.rmi.Remote;
@@ -68,17 +69,20 @@ public class JParSolverImpl extends UnicastRemoteObject implements
 		}
 	}
 
-	public JParSolverImpl(String host) throws RemoteException {
+	public JParSolverImpl(String host, int port) throws RemoteException {
 		if (System.getSecurityManager() == null) {
 			System.setSecurityManager(new RMISecurityManager());
 		}
 		
-		String serverName = "JParServer";		
+		String serverName = "JParServer";	
 		try {
-			Registry registry = LocateRegistry.getRegistry(host);
+			Registry registry = LocateRegistry.getRegistry(host, port);
 			this.server = (JParServer) registry.lookup(serverName);
+		} catch (AccessException e) {
+			System.err.println("Solver: Java RMI AccessException: " + e.getMessage());
+			return;					
 		} catch (RemoteException e) {
-			System.err.println("Solver: Java RMI Exception:" + e.getMessage());
+			System.err.println("Solver: Java RMI Exception: " + e.getMessage());
 			return;			
 		} catch (NotBoundException e) {
 			System.err.println("Solver: " + serverName + " lookup failed:" + e.getMessage());
@@ -168,10 +172,9 @@ public class JParSolverImpl extends UnicastRemoteObject implements
 	private boolean register() {
 		try {
 			return server.registerSolver(this);
-		} catch (Exception e) {
-			System.err.println("Solver: JParSolver Registering Exception:"
+		} catch (RemoteException e) {
+			System.err.println("Solver: JParSolver Registering Exception: "
 					+ e.getMessage());
-			e.printStackTrace();
 		}
 		return false;
 	}

@@ -91,7 +91,23 @@ public class JParServerImpl extends UnicastRemoteObject implements
 	
 	public static void main(String[] args) {
 		String name = "JParServer";
-		int port = 1099;
+
+		// default port number (1099)
+		int port = java.rmi.registry.Registry.REGISTRY_PORT;
+		
+		if (args.length > 1) {
+			System.err.println("Usage: jpar_server [port]");
+			System.exit(1);
+		}
+		if (args.length > 0) {
+		    try {
+		        port = Integer.parseInt(args[0]);
+		    } catch (NumberFormatException e) {
+		        System.err.println("Port number argument must be an integer");
+		        System.exit(1);
+		    }
+		}
+			
 		try {			
 			Registry r = LocateRegistry.createRegistry(port);
 			// Registry r = LocateRegistry.getRegistry("localhost");
@@ -109,7 +125,7 @@ public class JParServerImpl extends UnicastRemoteObject implements
 			e.printStackTrace();
 			return;
 		}
-		System.out.println("JPar server running...");
+		System.out.println("JPar server running on port " + port + "...");
 	}
 
 }

@@ -1,7 +1,9 @@
-function jpar_solver(hostname)
+function jpar_solver(hostname, port)
 %jpar_solver: Run parallellization solver on a Matlab node.
 %Inputs:  hostname - hostname of the jpar registration server instance,
 %                    defaults to localhost
+%         port     - port numer of the registration server instance,
+%                    defaults to 1099 (which is default for Java RMI)
 
 if ~exist('j2m_solver_wrapper','file'),
     error(['Function j2m_solver_wrapper doesn''t seam to exist']);
@@ -9,6 +11,9 @@ end
 
 if nargin == 0,
     hostname = 'localhost';
+    port = 1099;
+elseif nargin == 1
+    port = 1099;
 elseif nargin > 1,
     disp('Usage:');
     disp('  jpar_solver([''hostname''])');
@@ -16,7 +21,8 @@ end
 
 fprintf(1, 'Registering solver...');  
 javaaddpath jpar.jar;
-solver = matlab.jpar.solver.JParSolverImpl(hostname);
+
+solver = matlab.jpar.solver.JParSolverImpl(hostname, port);
 if solver.isInitialized
     fprintf(1, ' done\n');
     while solver.waitForJob(),

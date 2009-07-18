@@ -21,7 +21,7 @@ function [varargout]=jpar_client(funstr,varargin)
 
 javaaddpath jpar.jar;
 hostname = 'localhost';
-client = matlab.jpar.client.JParClientImpl(hostname);
+client = matlab.jpar.client.JParClientImpl(hostname, 1099);
 
 if ~client.isInitialized
     fprintf(2, 'jpar: client initialization failed\n');

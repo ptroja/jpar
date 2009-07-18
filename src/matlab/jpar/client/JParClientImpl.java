@@ -37,17 +37,17 @@ public class JParClientImpl extends UnicastRemoteObject implements
 		}
 	}
 
-	public JParClientImpl(String hostname) throws RemoteException {
+	public JParClientImpl(String hostname, int port) throws RemoteException {
 		if (System.getSecurityManager() == null) {
 			System.setSecurityManager(new RMISecurityManager());
 		}
 
 		String serverName = "JParServer";
 		try {			
-			Registry registry = LocateRegistry.getRegistry(hostname);
+			Registry registry = LocateRegistry.getRegistry(hostname, port);
 			this.server = (JParServer) registry.lookup(serverName);
 		} catch (RemoteException e) {
-			System.err.println("Solver: Java RMI Exception:" + e.getMessage());
+			System.err.println("Solver: Java RMI Exception: " + e.getMessage());
 			return;			
 		} catch (NotBoundException e) {
 			System.err.println("Solver: " + serverName + " lookup failed:" + e.getMessage());
