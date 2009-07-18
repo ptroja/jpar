@@ -92,16 +92,22 @@ public class JParServerImpl extends UnicastRemoteObject implements
 	public static void main(String[] args) {
 		String name = "JParServer";
 		int port = 1099;
-		try {
-			JParServer server = new JParServerImpl();
+		try {			
 			Registry r = LocateRegistry.createRegistry(port);
 			// Registry r = LocateRegistry.getRegistry("localhost");
+			JParServer server = new JParServerImpl();
 			r.bind(name, server);
+		} catch (RemoteException e) {
+			System.err
+				.println("Server: Java Remote Exception:"
+					+ e.getMessage());
+			return;		
 		} catch (Exception e) {
 			System.err
 					.println("Server: JParServer Implementation Exception:"
 							+ e.getMessage());
 			e.printStackTrace();
+			return;
 		}
 		System.out.println("JPar server running...");
 	}
