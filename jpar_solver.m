@@ -11,10 +11,10 @@ end
 
 if nargin == 0,
     hostname = 'localhost';
-    port = 1099;
+    rmiRegistryPort = 1099;
 elseif nargin == 1
-    port = 1099;
-elseif nargin > 1,
+    rmiRegistryPort = 1099;
+elseif nargin > 2,
     disp('Usage:');
     disp('  jpar_solver([''hostname''])');
 end
@@ -22,7 +22,7 @@ end
 fprintf(1, 'Registering solver...');  
 javaaddpath jpar.jar;
 
-solver = matlab.jpar.solver.JParSolverImpl(hostname, port);
+solver = matlab.jpar.solver.JParSolverImpl(hostname, rmiRegistryPort);
 if solver.isInitialized
     fprintf(1, ' done\n');
     while solver.waitForJob(),

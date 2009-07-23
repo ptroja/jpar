@@ -1,1 +1,1 @@
-java -jar jpar.jar
+java -jar jpar.jar %1

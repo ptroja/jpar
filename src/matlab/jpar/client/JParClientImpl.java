@@ -36,7 +36,7 @@ public class JParClientImpl extends UnicastRemoteObject implements
 			return this.results.get(taskID);
 		}
 	}
-
+	
 	public JParClientImpl(String hostname, int port) throws RemoteException {
 		if (System.getSecurityManager() == null) {
 			System.setSecurityManager(new RMISecurityManager());
@@ -97,6 +97,9 @@ public class JParClientImpl extends UnicastRemoteObject implements
 						+ solver.executeTask(this, taskID, nargout, argout, func, args));				
 				return taskID;				
 			}
+		} catch (RemoteException e) {
+			System.err.println("Client: Java Remote Exception: "
+					+ e.getMessage());			
 		} catch (Exception e) {
 			System.err.println("Client: JParClinet Exception: "
 					+ e.getMessage());
@@ -127,7 +130,6 @@ public class JParClientImpl extends UnicastRemoteObject implements
 		} catch (RemoteException e) {
 			System.err.println("Client: JParClinet Get Solvers: "
 					+ e.getMessage());
-			e.printStackTrace();
 		}
 		return null;
 	}
@@ -138,7 +140,6 @@ public class JParClientImpl extends UnicastRemoteObject implements
 		} catch (RemoteException e) {
 			System.err.println("Client: JParClinet Kill Solvers: "
 					+ e.getMessage());
-			e.printStackTrace();
 		}
 	}
 }
