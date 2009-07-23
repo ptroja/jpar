@@ -49,6 +49,16 @@ INSTALL:
 
    >> jpar_client('hosts');
 
+REMARK for multiple jPar running on the same machine:
+
+To use multiple jPar servers on the same machine please pick up alternative
+Java RMI port number, other than default 1099. Then run each part of the jPar
+with this port number:
+
+1. invoke jpar_server with the selected port number as a command line argument
+2. start jpar_solver(hostname, port) with selected port number
+3. modify rmiRegistryPort value in jpar_client.m script
+
 AUTHORS:
 
 Marek Majchrowski <M.Majchrowski@elka.pw.edu.pl>,
