@@ -143,5 +143,9 @@ for I=1:m_out
    eval(['varargout{' int2str(I) '}=Q' int2str(I) ';'], 'keyboard');
 end
 
+% keyboard;
+
+client.clearResults();
+
 clear tmp client;
 javarmpath jpar.jar;

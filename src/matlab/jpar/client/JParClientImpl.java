@@ -142,4 +142,8 @@ public class JParClientImpl extends UnicastRemoteObject implements
 					+ e.getMessage());
 		}
 	}
+	
+	public void clearResults() {
+		results.clear();
+	}
 }
