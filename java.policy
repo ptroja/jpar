@@ -19,18 +19,18 @@
 
 grant {
 	permission java.security.AllPermission;
-	
+
 	// Other options:
 	// permission java.net.SocketPermission "127.0.0.1:1024-", "accept, connect, listen, resolve";
 	// permission java.net.SocketPermission "localhost:1024-", "accept, connect, listen, resolve";
-	
+
 	// From http://java.sun.com/docs/books/tutorial/rmi/running.html
 	// Copyright 1995-2005 Sun Microsystems, Inc. Reprinted with permission 
-	
+
 	// permission java.net.SocketPermission "*:1024-65535", "connect,accept";
-    // permission java.net.SocketPermission "*:80", "connect";
-	
+	// permission java.net.SocketPermission "*:80", "connect";
+
 	// permission java.net.SocketPermission "*:1024-65535", "connect,accept";
-    // permission java.io.FilePermission "c:\\home\\ann\\public_html\\classes\\-", "read";
-    // permission java.io.FilePermission "c:\\home\\jones\\public_html\\classes\\-", "read";
+	// permission java.io.FilePermission "c:\\home\\ann\\public_html\\classes\\-", "read";
+	// permission java.io.FilePermission "c:\\home\\jones\\public_html\\classes\\-", "read";
 };
